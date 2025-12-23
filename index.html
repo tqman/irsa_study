@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NATO Phonetic Alphabet Practice</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎤</text></svg>">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Browser Warning Banner -->
+        <div id="browser-warning" class="browser-warning" hidden>
+            Speech recognition is not supported in your browser.
+        </div>
+
+        <!-- Header -->
+        <header class="app-header">
+            <h1>NATO Phonetic Alphabet</h1>
+        </header>
+
+        <!-- Timeout Control -->
+        <div class="timeout-control">
+            <label for="timeout-slider">Answer Timeout:</label>
+            <input type="range" id="timeout-slider" min="1" max="30" value="5" step="1">
+            <span id="timeout-value">5 seconds</span>
+
+            <label for="read-aloud-checkbox" class="checkbox-label">
+                <input type="checkbox" id="read-aloud-checkbox" checked>
+                Audio feedback
+            </label>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat correct">
+                <span class="stat-label">Correct</span>
+                <span id="stats-correct" class="stat-value">0</span>
+            </div>
+            <div class="stat incorrect">
+                <span class="stat-label">Incorrect</span>
+                <span id="stats-incorrect" class="stat-value">0</span>
+            </div>
+            <div class="stat timeout">
+                <span class="stat-label">Timeouts</span>
+                <span id="stats-timeouts" class="stat-value">0</span>
+            </div>
+        </div>
+
+        <!-- Main Card -->
+        <main class="flashcard">
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+
+            <!-- Letter Display -->
+            <div id="letter-display" class="letter-display">?</div>
+
+            <!-- Status Indicator -->
+            <div id="status-indicator" class="status-indicator ready">
+                Ready
+            </div>
+
+            <!-- Feedback Container -->
+            <div id="feedback-container" class="feedback-container" hidden>
+                <p id="feedback-text" class="feedback-text"></p>
+                <p id="correct-answer" class="correct-answer"></p>
+            </div>
+        </main>
+
+        <!-- Instructions -->
+        <footer class="instructions">
+            <p id="instruction-text">Press <kbd>Space</kbd> or tap anywhere to start</p>
+        </footer>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
