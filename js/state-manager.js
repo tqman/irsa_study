@@ -19,6 +19,7 @@ class StateManager {
         this.currentState = AppState.INITIALIZING;
         this.currentLetter = null;
         this.usedLetters = [];
+        this.deck = [];
         this.stats = {
             correct: 0,
             incorrect: 0,
@@ -51,9 +52,22 @@ class StateManager {
         this._notify({ type: 'letter', letter });
     }
 
-    getRandomLetter() {
+    _shuffleDeck() {
         const letters = Object.keys(NATO_ALPHABET);
-        return letters[Math.floor(Math.random() * letters.length)];
+        // Fisher-Yates shuffle
+        for (let i = letters.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [letters[i], letters[j]] = [letters[j], letters[i]];
+        }
+        this.deck = letters;
+    }
+
+    getNextLetter() {
+        // Reshuffle when deck is empty
+        if (this.deck.length === 0) {
+            this._shuffleDeck();
+        }
+        return this.deck.pop();
     }
 
     recordResult(type) {
@@ -67,6 +81,7 @@ class StateManager {
     reset() {
         this.currentLetter = null;
         this.usedLetters = [];
+        this.deck = [];
         this.stats = { correct: 0, incorrect: 0, timeouts: 0, total: 0 };
         this.setState(AppState.READY);
     }

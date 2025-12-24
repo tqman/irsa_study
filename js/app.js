@@ -142,8 +142,8 @@ class App {
         // Clear any existing timers
         this._clearTimers();
 
-        // Get random letter
-        const letter = this.state.getRandomLetter();
+        // Get next letter from shuffled deck
+        const letter = this.state.getNextLetter();
         this.state.setCurrentLetter(letter);
 
         // Update UI
