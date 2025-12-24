@@ -39,6 +39,9 @@ class App {
         this.speech.onEnd = () => this._handleSpeechEnd();
         this.speech.onStart = () => this._handleSpeechStart();
 
+        // Request microphone access early to avoid permission popup during quiz
+        await this._requestMicrophoneAccessEarly();
+
         // Setup state listener
         this.state.subscribe((change) => this._handleStateChange(change));
 
@@ -85,6 +88,49 @@ class App {
         } catch (e) {
             // Not all browsers support querying microphone permission
         }
+    }
+
+    async _requestMicrophoneAccessEarly() {
+        // Only request if permission is in 'prompt' state
+        try {
+            if (!navigator.permissions) {
+                // Permissions API not available, try anyway
+                this._triggerEarlyMicAccess();
+                return;
+            }
+
+            const result = await navigator.permissions.query({ name: 'microphone' });
+
+            if (result.state === 'prompt') {
+                // Permission not yet granted - trigger early request
+                this._triggerEarlyMicAccess();
+            }
+            // If 'granted' or 'denied', no need to trigger early
+        } catch (e) {
+            // Permissions API query failed, try anyway
+            this._triggerEarlyMicAccess();
+        }
+    }
+
+    _triggerEarlyMicAccess() {
+        // Save the original onStart callback
+        const originalOnStart = this.speech.onStart;
+
+        // Set temporary onStart callback that stops recognition immediately
+        this.speech.onStart = () => {
+            // Permission granted, mic started - stop it immediately
+            this.speech.stop();
+
+            // Restore original callback
+            this.speech.onStart = originalOnStart;
+        };
+
+        // Start speech recognition to trigger permission popup
+        // This will either:
+        // - Show permission popup (first time)
+        // - Start/stop silently (if already granted)
+        // - Trigger onError if denied (handled by existing error handler)
+        this.speech.start();
     }
 
     _setupEventListeners() {
