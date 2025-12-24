@@ -109,7 +109,7 @@ class App {
         });
 
         // Click/tap anywhere to advance (except interactive elements)
-        this.ui.elements.appContainer.addEventListener('click', (e) => {
+        document.addEventListener('click', (e) => {
             // Don't trigger if clicking the timeout slider
             if (e.target.closest('.timeout-control') || e.target.closest('input')) {
                 return;
