@@ -13,6 +13,7 @@ class App {
 
         this.timeoutTimer = null;
         this.progressTimer = null;
+        this.receivedResult = false;
 
         this._init();
     }
@@ -128,6 +129,10 @@ class App {
             // Stop listening and show answer
             this.speech.abort();
             this._showTimeout();
+        } else if (currentState === AppState.WAITING_FOR_RESULT) {
+            // Skip waiting for result and show timeout
+            this.speech.abort();
+            this._showTimeout();
         }
     }
 
@@ -153,6 +158,7 @@ class App {
     }
 
     _startListening() {
+        this.receivedResult = false;
         this.state.setState(AppState.LISTENING);
         this.ui.setStatus('listening');
         this.ui.setInstruction('Say the NATO phonetic word...');
@@ -173,8 +179,7 @@ class App {
         this._startProgressBar(timeoutMs);
 
         this.timeoutTimer = setTimeout(() => {
-            this.speech.abort();
-            this._showTimeout();
+            this._handleTimerExpired();
         }, timeoutMs);
     }
 
@@ -207,7 +212,17 @@ class App {
         this.ui.updateProgressBar(0);
     }
 
+    _handleTimerExpired() {
+        this._clearTimers();  // Stops progress bar, clears timeout timer
+        this.state.setState(AppState.WAITING_FOR_RESULT);
+        this.ui.setStatus('processing');
+        this.ui.setInstruction('Processing...');
+        // Don't abort speech - let it finish naturally
+        // onresult or onend will handle the final result
+    }
+
     _handleSpeechResult(results) {
+        this.receivedResult = true;
         this._clearTimers();
         this.state.setState(AppState.PROCESSING);
 
@@ -297,7 +312,10 @@ class App {
     }
 
     _handleSpeechEnd() {
-        // Speech recognition ended
+        // If waiting for result and recognition ended without one, show timeout
+        if (this.state.currentState === AppState.WAITING_FOR_RESULT && !this.receivedResult) {
+            this._showTimeout();
+        }
     }
 
     _handleSpeechStart() {

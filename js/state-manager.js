@@ -8,6 +8,7 @@ const AppState = {
     DISPLAYING_LETTER: 'displaying_letter',
     LISTENING: 'listening',
     PROCESSING: 'processing',
+    WAITING_FOR_RESULT: 'waiting_for_result',
     SHOWING_RESULT: 'showing_result',
     TIMEOUT: 'timeout',
     ERROR: 'error'
