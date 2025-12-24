@@ -286,11 +286,10 @@ class App {
         this._clearTimers();
 
         if (error.error === 'no-speech') {
-            // No speech detected, treat as timeout
-            // But if we're already waiting for result, let onend handle it
-            if (this.state.currentState !== AppState.WAITING_FOR_RESULT) {
-                this._showTimeout();
-            }
+            // No speech detected - always show timeout
+            // Don't rely on onend, which may not fire reliably after errors
+            this._showTimeout();
+            return;
         } else if (error.error === 'not-allowed') {
             // Microphone permission denied
             this.ui.showBrowserWarning(error.message);
