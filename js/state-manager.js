@@ -20,6 +20,8 @@ class StateManager {
         this.currentLetter = null;
         this.usedLetters = [];
         this.deck = [];
+        this.recentLetters = [];  // Rolling window of last 5 returned letters
+        this.MAX_RESHUFFLE_ATTEMPTS = 100;  // Safety limit to prevent infinite loops
         this.stats = {
             correct: 0,
             incorrect: 0,
@@ -53,13 +55,46 @@ class StateManager {
     }
 
     _shuffleDeck() {
-        const letters = Object.keys(NATO_ALPHABET);
-        // Fisher-Yates shuffle
-        for (let i = letters.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [letters[i], letters[j]] = [letters[j], letters[i]];
+        let attempts = 0;
+
+        while (attempts < this.MAX_RESHUFFLE_ATTEMPTS) {
+            const letters = Object.keys(NATO_ALPHABET);
+            // Fisher-Yates shuffle
+            for (let i = letters.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [letters[i], letters[j]] = [letters[j], letters[i]];
+            }
+
+            // Check for overlap with recent letters
+            if (!this._hasOverlap(letters)) {
+                this.deck = letters;
+                return;
+            }
+
+            attempts++;
         }
-        this.deck = letters;
+
+        // Safety fallback: use deck anyway after max attempts (extremely unlikely)
+        this.deck = Object.keys(NATO_ALPHABET);
+    }
+
+    _hasOverlap(newDeck) {
+        // No previous letters to check on first shuffle
+        if (this.recentLetters.length === 0) {
+            return false;
+        }
+
+        // Get the last 5 positions of new deck (these will be popped first)
+        const upcomingLetters = newDeck.slice(-5);
+
+        // Check if any upcoming letters match recent letters
+        for (const letter of upcomingLetters) {
+            if (this.recentLetters.includes(letter)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     getNextLetter() {
@@ -67,7 +102,15 @@ class StateManager {
         if (this.deck.length === 0) {
             this._shuffleDeck();
         }
-        return this.deck.pop();
+        const letter = this.deck.pop();
+
+        // Track last 5 returned letters
+        this.recentLetters.push(letter);
+        if (this.recentLetters.length > 5) {
+            this.recentLetters.shift(); // Keep only last 5
+        }
+
+        return letter;
     }
 
     recordResult(type) {
@@ -82,6 +125,7 @@ class StateManager {
         this.currentLetter = null;
         this.usedLetters = [];
         this.deck = [];
+        this.recentLetters = [];  // Clear tracked letters on reset
         this.stats = { correct: 0, incorrect: 0, timeouts: 0, total: 0 };
         this.setState(AppState.READY);
     }
