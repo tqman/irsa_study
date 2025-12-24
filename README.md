@@ -36,7 +36,7 @@ The app requires a browser with Web Speech API support:
 
 ## How to Use
 
-1. **Open the app**: Visit the GitHub Pages URL or open `index.html` in a supported browser
+1. **Open the app**: Visit the GitHub Pages URL
 2. **Grant microphone access**: Your browser will prompt for permission on first use
 3. **Hear the instruction**: The app will announce "Press space or tap anywhere to start"
 4. **Start practicing**: Press <kbd>Space</kbd> or tap/click anywhere on the page
@@ -85,6 +85,34 @@ This app is designed to be fully accessible:
 - **Keyboard Navigation**: Full keyboard support with <kbd>Space</kbd> and <kbd>Tab</kbd>
 - **Touch Support**: Tap anywhere on mobile devices
 - **No Screen Reader Required**: Built-in TTS provides comprehensive audio feedback
+
+## Local Development
+
+**Note**: The app requires a secure context (HTTPS) because the Google TTS interface used by the Web Speech API requires it. You cannot simply open `index.html` directly in your browser.
+
+To run the app locally:
+
+1. **Generate a self-signed certificate** (one-time setup):
+   ```bash
+   openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes -subj "/CN=localhost"
+   ```
+
+2. **Start the HTTPS server**:
+   ```bash
+   python3 -m http.server 8000 --bind localhost --protocol HTTP/1.1 \
+     --cert cert.pem --key key.pem
+   ```
+
+3. **Access the app**: Open https://localhost:8000 in your browser
+
+4. **Accept the security warning**: Your browser will warn about the self-signed certificate - this is expected for local development. Click "Advanced" and proceed to localhost.
+
+**Alternative using Python 2**:
+```bash
+# After creating the certificate as above
+python -m SimpleHTTPServer 8000
+```
+Note: Python 2's SimpleHTTPServer doesn't support HTTPS directly. Use Python 3 for HTTPS support.
 
 ## Deployment to GitHub Pages
 
