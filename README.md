@@ -53,8 +53,8 @@ The app requires a browser with Web Speech API support:
 ### Accepted Alternatives
 
 The app accepts common alternative spellings:
-- "Alfa" for "Alpha"
-- "Juliett" for "Juliet"
+- "Alpha" for "Alfa"
+- "Juliet" for "Juliett"
 - "X ray" or "Xray" for "X-ray"
 - "Whisky" for "Whiskey"
 
@@ -62,7 +62,7 @@ The app accepts common alternative spellings:
 
 | Letter | Word     | Letter | Word     |
 |--------|----------|--------|----------|
-| A      | Alpha    | N      | November |
+| A      | Alfa     | N      | November |
 | B      | Bravo    | O      | Oscar    |
 | C      | Charlie  | P      | Papa     |
 | D      | Delta    | Q      | Quebec   |
@@ -71,7 +71,7 @@ The app accepts common alternative spellings:
 | G      | Golf     | T      | Tango    |
 | H      | Hotel    | U      | Uniform  |
 | I      | India    | V      | Victor   |
-| J      | Juliet   | W      | Whiskey  |
+| J      | Juliett  | W      | Whiskey  |
 | K      | Kilo     | X      | X-ray    |
 | L      | Lima     | Y      | Yankee   |
 | M      | Mike     | Z      | Zulu     |

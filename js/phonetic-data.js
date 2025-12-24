@@ -1,6 +1,6 @@
 // Complete NATO phonetic alphabet mapping
 const NATO_ALPHABET = {
-    'A': 'Alpha',
+    'A': 'Alfa',
     'B': 'Bravo',
     'C': 'Charlie',
     'D': 'Delta',
@@ -9,7 +9,7 @@ const NATO_ALPHABET = {
     'G': 'Golf',
     'H': 'Hotel',
     'I': 'India',
-    'J': 'Juliet',
+    'J': 'Juliett',
     'K': 'Kilo',
     'L': 'Lima',
     'M': 'Mike',
@@ -35,9 +35,8 @@ const PHONETIC_TO_LETTER = Object.fromEntries(
 
 // Alternative spellings/pronunciations that should be accepted
 const ALTERNATIVE_MATCHES = {
-    'alfa': 'A',       // Common alternate spelling
-    'juliet': 'J',
-    'juliett': 'J',
+    'alpha': 'A',      // Common alternate spelling
+    'juliet': 'J',     // Common alternate spelling
     'x ray': 'X',
     'xray': 'X',
     'whisky': 'W'      // British spelling
