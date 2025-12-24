@@ -14,6 +14,7 @@ class App {
         this.timeoutTimer = null;
         this.progressTimer = null;
         this.receivedResult = false;
+        this.gracePeriodTimer = null;
 
         this._init();
     }
@@ -131,6 +132,7 @@ class App {
             this._showTimeout();
         } else if (currentState === AppState.WAITING_FOR_RESULT) {
             // Skip waiting for result and show timeout
+            this._clearGracePeriodTimer();
             this.speech.abort();
             this._showTimeout();
         }
@@ -209,7 +211,15 @@ class App {
             clearInterval(this.progressTimer);
             this.progressTimer = null;
         }
+        this._clearGracePeriodTimer();
         this.ui.updateProgressBar(0);
+    }
+
+    _clearGracePeriodTimer() {
+        if (this.gracePeriodTimer) {
+            clearTimeout(this.gracePeriodTimer);
+            this.gracePeriodTimer = null;
+        }
     }
 
     _handleTimerExpired() {
@@ -219,9 +229,18 @@ class App {
         this.ui.setInstruction('Processing...');
         // Don't abort speech - let it finish naturally
         // onresult or onend will handle the final result
+
+        // Safety timeout: if no result/error arrives in 5 seconds, force timeout
+        this.gracePeriodTimer = setTimeout(() => {
+            if (this.state.currentState === AppState.WAITING_FOR_RESULT) {
+                this.speech.abort();
+                this._showTimeout();
+            }
+        }, 5000);
     }
 
     _handleSpeechResult(results) {
+        this._clearGracePeriodTimer();
         this.receivedResult = true;
         this._clearTimers();
         this.state.setState(AppState.PROCESSING);
@@ -284,6 +303,7 @@ class App {
 
     _handleSpeechError(error) {
         this._clearTimers();
+        this._clearGracePeriodTimer();
 
         if (error.error === 'no-speech') {
             // No speech detected - always show timeout
@@ -314,6 +334,7 @@ class App {
     }
 
     _handleSpeechEnd() {
+        this._clearGracePeriodTimer();
         // If waiting for result and recognition ended without one, show timeout
         if (this.state.currentState === AppState.WAITING_FOR_RESULT && !this.receivedResult) {
             this._showTimeout();
