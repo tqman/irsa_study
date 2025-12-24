@@ -213,18 +213,15 @@ class App {
     }
 
     _handleTimerExpired() {
-        console.log('[DEBUG] _handleTimerExpired called, current state:', this.state.currentState);
         this._clearTimers();  // Stops progress bar, clears timeout timer
         this.state.setState(AppState.WAITING_FOR_RESULT);
         this.ui.setStatus('processing');
         this.ui.setInstruction('Processing...');
         // Don't abort speech - let it finish naturally
         // onresult or onend will handle the final result
-        console.log('[DEBUG] Now in WAITING_FOR_RESULT state');
     }
 
     _handleSpeechResult(results) {
-        console.log('[DEBUG] _handleSpeechResult called, state:', this.state.currentState, 'results:', results);
         this.receivedResult = true;
         this._clearTimers();
         this.state.setState(AppState.PROCESSING);
@@ -286,17 +283,13 @@ class App {
     }
 
     _handleSpeechError(error) {
-        console.log('[DEBUG] _handleSpeechError called, error:', error.error, 'state:', this.state.currentState);
         this._clearTimers();
 
         if (error.error === 'no-speech') {
             // No speech detected, treat as timeout
             // But if we're already waiting for result, let onend handle it
             if (this.state.currentState !== AppState.WAITING_FOR_RESULT) {
-                console.log('[DEBUG] no-speech error, NOT in WAITING_FOR_RESULT, showing timeout');
                 this._showTimeout();
-            } else {
-                console.log('[DEBUG] no-speech error, but in WAITING_FOR_RESULT, ignoring');
             }
         } else if (error.error === 'not-allowed') {
             // Microphone permission denied
@@ -322,10 +315,8 @@ class App {
     }
 
     _handleSpeechEnd() {
-        console.log('[DEBUG] _handleSpeechEnd called, state:', this.state.currentState, 'receivedResult:', this.receivedResult);
         // If waiting for result and recognition ended without one, show timeout
         if (this.state.currentState === AppState.WAITING_FOR_RESULT && !this.receivedResult) {
-            console.log('[DEBUG] In WAITING_FOR_RESULT with no result, showing timeout');
             this._showTimeout();
         }
     }
