@@ -32,6 +32,8 @@ The app requires a browser with Web Speech API support:
 - ✅ Safari 14.1+ (partial support)
 - ❌ Firefox (not supported)
 
+Unfortunately Web Speech API support under Linux is questionable.
+
 **Note**: Microphone access is required. The browser will prompt for permission on first use.
 
 ## How to Use
@@ -106,23 +108,6 @@ To run the app locally:
 3. **Access the app**: Open https://localhost:8000 in your browser
 
 4. **Accept the security warning**: Your browser will warn about the self-signed certificate - this is expected for local development. Click "Advanced" and proceed to localhost.
-
-**Alternative using Python 2**:
-```bash
-# After creating the certificate as above
-python -m SimpleHTTPServer 8000
-```
-Note: Python 2's SimpleHTTPServer doesn't support HTTPS directly. Use Python 3 for HTTPS support.
-
-## Deployment to GitHub Pages
-
-1. Push this repository to GitHub
-2. Go to Settings → Pages
-3. Under "Source", select: **Deploy from a branch**
-4. Under "Branch", select: **main** and **/ (root)**
-5. Click **Save**
-6. Your app will be available at https://tqman.github.io/irsa_study/
-7. Wait a few minutes for deployment to complete
 
 ## File Structure
 
