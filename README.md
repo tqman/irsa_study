@@ -27,10 +27,10 @@ A browser-based flashcard app for practicing the International Radiotelephony Sp
 
 The app requires a browser with Web Speech API support:
 
-- ✅ Chrome 25+ (full support)
-- ✅ Edge Chromium (full support)
-- ✅ Safari 14.1+ (partial support)
-- ❌ Firefox (not supported)
+- ✅ Chrome 25+
+- ✅ Edge Chromium
+- ✅ Safari 14.1+
+- ❌ Firefox
 
 Unfortunately Web Speech API support under Linux is questionable.
 
