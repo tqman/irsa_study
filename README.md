@@ -90,24 +90,22 @@ This app is designed to be fully accessible:
 
 ## Local Development
 
-**Note**: The app requires a secure context (HTTPS) because the Google TTS interface used by the Web Speech API requires it. You cannot simply open `index.html` directly in your browser.
+**Note**: The app requires a secure context (HTTPS) because the Web Speech API requires it. You cannot simply open `index.html` directly in your browser.
 
 To run the app locally:
 
-1. **Generate a self-signed certificate** (one-time setup):
+1. **Start the HTTPS server**:
    ```bash
-   openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes -subj "/CN=localhost"
+   python3 https_server.py
    ```
 
-2. **Start the HTTPS server**:
-   ```bash
-   python3 -m http.server 8000 --bind localhost --protocol HTTP/1.1 \
-     --cert cert.pem --key key.pem
-   ```
+   The script will automatically generate a self-signed certificate if needed.
 
-3. **Access the app**: Open https://localhost:8000 in your browser
+2. **Access the app**: Open https://localhost:4443 in your browser
 
-4. **Accept the security warning**: Your browser will warn about the self-signed certificate - this is expected for local development. Click "Advanced" and proceed to localhost.
+3. **Accept the security warning**: Your browser will warn about the self-signed certificate - this is expected for local development. Click "Advanced" and proceed to localhost.
+
+**Requirements**: Python 3 and OpenSSL (pre-installed on most systems)
 
 ## File Structure
 
