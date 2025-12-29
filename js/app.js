@@ -168,20 +168,13 @@ class App {
     _handleSpaceBar() {
         const currentState = this.state.currentState;
 
+        // Only respond to space/click when showing "Press Space" instruction
         if (currentState === AppState.READY ||
             currentState === AppState.SHOWING_RESULT ||
             currentState === AppState.TIMEOUT) {
             this._showNextLetter();
-        } else if (currentState === AppState.LISTENING) {
-            // Stop listening and show answer
-            this.speech.abort();
-            this._showTimeout();
-        } else if (currentState === AppState.WAITING_FOR_RESULT) {
-            // Skip waiting for result and show timeout
-            this._clearGracePeriodTimer();
-            this.speech.abort();
-            this._showTimeout();
         }
+        // Ignore space/click during timer and processing states
     }
 
     _showNextLetter() {
