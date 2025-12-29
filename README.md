@@ -8,7 +8,7 @@ A browser-based flashcard app for practicing the International Radiotelephony Sp
 
 ## Features
 
-- **Random Letter Display**: Randomly selects letters from A-Z for practice
+- **Shuffled Deck System**: Shuffles all 26 letters and presents them sequentially - you'll see every letter before any repeats
 - **Voice Recognition**: Uses the browser's built-in Web Speech API to listen for your answers
 - **Audio Feedback** (Accessibility): Text-to-speech announces letters and results - enabled by default for blind users
 - **Configurable Timeout**: Adjust the answer timeout from 1-30 seconds (default: 5 seconds)
